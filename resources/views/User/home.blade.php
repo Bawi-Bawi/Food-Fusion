@@ -283,11 +283,12 @@
     </div>
     <div class="flex-grow-1">
       <div class="cookie-header">We use cookies</div>
-      <p class="mb-3 small text-muted">
+      <p class="small text-muted">
         We use cookies to enhance your experience, analyze site traffic, and personalize content.
         By continuing to use our site, you consent to our use of cookies.
       </p>
-      <div class="d-flex gap-2">
+      <a href="{{ route('legal#information')}}" class="small" style="color: #ff7a00">Privacy & Policy</a>
+      <div class="d-flex gap-2 mt-3">
         <button class="btn btn-warning btn-sm text-white" id="acceptBtn">Accept</button>
         <button class="btn btn-outline-secondary btn-sm" id="declineBtn">Decline</button>
       </div>
