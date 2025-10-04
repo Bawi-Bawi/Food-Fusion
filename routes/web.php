@@ -83,4 +83,6 @@ Route::middleware([
     //user profile
     Route::get('/profile/information/{id}',[HomeController::class,'profileInformation'])->name('profile#information');
     Route::post('/profile/update/{id}',[HomeController::class,'updateProfile'])->name('profile#update');
+    Route::get('/change/password/{id}',[HomeController::class,'changePasswordPage'])->name('change#passwordPage');
+    Route::post('/change/password/{id}',[HomeController::class,'changePassword'])->name('change#password');
 });

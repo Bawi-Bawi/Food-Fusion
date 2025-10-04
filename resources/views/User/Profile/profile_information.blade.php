@@ -63,7 +63,12 @@
     }
 </style>
 @section('content')
-
+@if (session('success'))
+<div class="alert alert-success alert-dismissible fade show w-50 m-auto my-3" role="alert">
+  <strong>Success!</strong> {{ session('success') }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
 <div class="profile-card">
   <div class="profile-img">
     @if ($user->image)
@@ -101,8 +106,9 @@
       <input type="email" class="form-control" disabled value="{{ $user->email }}" placeholder="Email Address">
     </div>
     <button type="submit" class="btn btn-update btn-warning w-100">Update Profile</button>
-    <a href="{{ route('home#page')}}" class="cancel-btn">Cancel</a>
   </form>
+  <a href="{{ route('change#passwordPage',$user->id)}}" class="btn btn-update btn-warning w-100 mt-3">Change Password</a>
+<a href="{{ route('home#page')}}" class="cancel-btn">Cancel</a>
 </div>
 @endsection
 @section('scripts')

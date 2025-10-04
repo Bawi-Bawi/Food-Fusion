@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Event;
 use App\Models\Recipe;
+use App\Models\Contact;
+use App\Models\Resources;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
-use App\Models\Event;
-use App\Models\Resources;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -121,5 +122,29 @@ class HomeController extends Controller
             'message'=> $request->message
         ]);
     return redirect()->route('home#page')->with(['success'=>'Message sent successfully!']);
+    }
+    //change password page
+    public function changePasswordPage($id){
+        $user = User::findOrFail($id);
+        return view('user.profile.changePassword',compact('user'));
+    }
+    //change password
+    public function changePassword(Request $request, $id){
+        $data = $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|different:old_password',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        $user = User::findOrFail($id);
+        if (Hash::check($data['old_password'], $user->password)) {
+            // Old password matches, update to new password
+            $user->password = Hash::make($data['new_password']);
+            $user->save();
+            return redirect()->route('profile#information', ['id' => $id])->with('success', 'Password changed successfully!');
+        } else {
+            // Old password does not match
+            return back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+        }
     }
 }
