@@ -68,7 +68,7 @@
             <li class=""><a href="{{ route('about#us')}}" class="text-decoration-none text-black">About</a></li>
             <li class=""><a href="{{ route('contact#us')}}" class="text-decoration-none text-black">Contact</a></li>
             <li class=""><a href="{{ route('cook_book#page')}}" class="text-decoration-none text-black">Community</a></li>
-            <li class=""><a href="" class="text-decoration-none text-black">Resources</a></li>
+            <li class=""><a href="{{ route('resources','Culinary Resources')}}" class="text-decoration-none text-black">Resource</a></li>
           </ul>
         </div>
         <div class="col">
