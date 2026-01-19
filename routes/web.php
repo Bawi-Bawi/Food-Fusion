@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AjaxController;
-use App\Http\Controllers\CookBookController;
-use App\Http\Controllers\HomeController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MailController;
+use Illuminate\Container\Attributes\Log;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\CookBookController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Middleware\RoleMiddleware;
-use GuzzleHttp\Middleware;
-use Illuminate\Container\Attributes\Log;
+use App\Http\Middleware\OTPMiddleware;
 
 Route::get('/', function () {
     return redirect()->route('home#page');
@@ -28,6 +30,17 @@ Route::get('/logout', function () {
 });
 
 Route::post('/register', [RegisterController::class, 'register'])->name('account#register');
+//email verification
+Route::middleware([
+    OTPMiddleware::class
+])->group(function(){
+    Route::get('/verify-email', fn () => view('emails.otp'))
+        ->name('verify#email#form');
+    Route::post('/verify-email', [RegisterController::class, 'verifyEmail'])
+        ->name('verify#email');
+});
+
+//login and logout
 Route::post('/login', [LoginController::class, 'login'])->name('account#login');
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('account#logout');
 // admin
@@ -72,6 +85,7 @@ Route::get('/contact/us/',[HomeController::class,'contactUs'])->name('contact#us
 Route::get('/legal/information', [HomeController::class, 'legalInformation'])->name('legal#information');
 Route::get('/resources/{name}', [HomeController::class, 'resources'])->name('resources');
 Route::post('/contact',[HomeController::class,'contact'])->name('user#contact');
+
 Route::middleware([
     'auth',
 ])->group(function () {
