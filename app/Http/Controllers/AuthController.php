@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,15 @@ class AuthController extends Controller
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ]
         ]);
         $user = User::create([
             'first_name' => $request->fname,
