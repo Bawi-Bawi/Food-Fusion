@@ -8,10 +8,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailController;
 use Illuminate\Container\Attributes\Log;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CookBookController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\OTPMiddleware;
 
 Route::get('/', function () {
@@ -29,26 +28,26 @@ Route::get('/logout', function () {
     return abort(404);
 });
 
-Route::post('/register', [RegisterController::class, 'register'])->name('account#register');
+Route::post('/register', [AuthController::class, 'register'])->name('account#register');
 //email verification
 Route::middleware([
     OTPMiddleware::class
 ])->group(function(){
     Route::get('/verify-email', fn () => view('emails.otp'))
         ->name('verify#email#form');
-    Route::post('/verify-email', [RegisterController::class, 'verifyEmail'])
+    Route::post('/verify-email', [AuthController::class, 'verifyEmail'])
         ->name('verify#email');
 });
 
 //login and logout
-Route::post('/login', [LoginController::class, 'login'])->name('account#login');
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('account#logout');
+Route::post('/login', [AuthController::class, 'login'])->name('account#login');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('account#logout');
 // admin
 Route::middleware([
     'auth',
     RoleMiddleware::class
 ])->group(function () {
-    Route::get('/dashboard',[LoginController::class, 'dashboard'])->name('admin#dashboard');
+    Route::get('/dashboard',[AdminController::class, 'dashboard'])->name('admin#dashboard');
     Route::delete('/user/delete/{id}',[AdminController::class,'deleteUser'])->name('user#delete');
     Route::get('/recipes/list',[AdminController::class,'recipesList'])->name('recipes#list');
     Route::get('/recipe/admin/details/{id}',[AdminController::class,'recipeDetails'])->name('recipe#adminDetails');

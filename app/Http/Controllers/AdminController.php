@@ -14,10 +14,25 @@ use App\Models\Ingredients;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
+     //admin dashboard
+    public function dashboard()
+    {
+        if (Auth::check() && Auth::user()->role === 'admin') {
+             $users = User::when(request('table_search'),function($query){
+                return $query->orWhere('first_name','LIKE','%'.request('table_search').'%')
+                                ->orWhere('last_name','LIKE','%'.request('table_search').'%')
+                             ->orWhere('email','LIKE','%'.request('table_search').'%');
+            })->paginate(5);
+            $users->appends(request()->all());
+            return view('admin.dashboard',compact('users'));
+        }
+        return redirect('/home');
+    }
 
     // delete user
     public function deleteUser($id){
