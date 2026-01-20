@@ -41,6 +41,12 @@ class HomeController extends Controller
         return view('user.profile.profile_information',compact('user'));
     }
 
+    //update profile page
+    public function updateProfilePage($id){
+        $user = User::findOrFail($id);
+        return view('user.profile.updateProfile',compact('user'));
+    }
+
     //update profile
     public function updateProfile(Request $request, $id){
         $data = $request->validate([
