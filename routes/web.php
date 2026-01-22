@@ -1,12 +1,9 @@
 <?php
 
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MailController;
-use Illuminate\Container\Attributes\Log;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RecipeController;
